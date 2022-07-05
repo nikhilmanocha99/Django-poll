@@ -1,0 +1,22 @@
+{% extends "polls/index.html" %}
+{% block title %}Poll Detail {% endblock %}
+{% block body %}
+    <div class="alert alert-success">
+        <h2>{{ poll.question }}</h2>
+    </div>
+    {% if error_message %}
+        <div class="alert alert-error">
+            <p><strong>{{ error_message }}</strong></p>
+        </div>
+    {% endif %}
+    <form class="form-vote" action="{% url 'polls:vote' poll.id %}" method="post">
+        {% csrf_token %}
+        {% for choice in poll.choice_set.all %}
+            <input type="radio" class="radio inline control-label" name="choice" id="choice{{ forloop.counter }}"
+                   value="{{ choice.id }}"/>
+            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br/>
+        {% endfor %}
+        <input type="submit" value="Vote" class="btn btn-primary"/>
+    </form>
+
+{% endblock %}
